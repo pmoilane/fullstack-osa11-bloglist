@@ -1,0 +1,26 @@
+{
+  "name": "playwright_tests",
+  "version": "1.0.0",
+  "description": "bloglist E2E testing with Playwright",
+  "license": "ISC",
+  "author": "pmoilane",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "install": "(cd backend && npm install)",
+    "postinstall": "(cd frontend && npm install)",
+    "eslint": "concurrently \"(cd backend && npm run lint)\" \"(cd frontend && npm run lint)\"",
+    "test": "concurrently \"(cd backend && npm run test)\" \"(cd frontend && npm run test)\"",
+    "build": "cd frontend && npm run build",
+    "dev": "concurrently \"(cd backend && npm run dev)\" \"(cd frontend && npm run dev)\"",
+    "start": "(cd backend && npm run start)",
+    "start:test": "(cd backend && npm run start:test)",
+    "test:e2e": "playwright test --project=chromium",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.3",
+    "concurrently": "^10.0.5"
+  }
+}
