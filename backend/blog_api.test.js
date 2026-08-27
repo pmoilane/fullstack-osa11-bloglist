@@ -43,10 +43,10 @@ describe('tests for POST "/api/blogs"', async () => {
   test('blogs can be added', async () => {
     const blogsBeforePOST = await api.get('/api/blogs')
     const newBlog = {
-      "title": "My Blog",
-      "author": "John",
-      "url": "http://blogman.com",
-      "likes": 2
+      'title': 'My Blog',
+      'author': 'John',
+      'url': 'http://blogman.com',
+      'likes': 2
     }
     await api
       .post('/api/blogs')
@@ -56,7 +56,7 @@ describe('tests for POST "/api/blogs"', async () => {
       .expect('Content-Type', /application\/json/)
     const blogsAfterPOST = await api.get('/api/blogs')
     assert.strictEqual(blogsBeforePOST.body.length + 1, blogsAfterPOST.body.length)
-    const checkBlogs = blogsAfterPOST.body.some(blog => 
+    const checkBlogs = blogsAfterPOST.body.some(blog =>
       blog.title === newBlog.title &&
       blog.author === newBlog.author &&
       blog.url === newBlog.url &&
@@ -66,9 +66,9 @@ describe('tests for POST "/api/blogs"', async () => {
   })
   test('if blog does not have likes field, it gets value 0', async () => {
     const newBlog = {
-      "title": "My Blog",
-      "author": "John",
-      "url": "http://blogman.com"
+      'title': 'My Blog',
+      'author': 'John',
+      'url': 'http://blogman.com'
     }
     const response = await api
       .post('/api/blogs')
@@ -80,8 +80,8 @@ describe('tests for POST "/api/blogs"', async () => {
   })
   test('if blog does not have a title or author, return status 400 Bad Request', async () => {
     const newBlog = {
-      "author": "John",
-      "url": "http://blogman.com"
+      'author': 'John',
+      'url': 'http://blogman.com'
     }
     await api
       .post('/api/blogs')
@@ -89,8 +89,8 @@ describe('tests for POST "/api/blogs"', async () => {
       .send(newBlog)
       .expect(400)
     const newBlog2 = {
-      "title": "My Blog",
-      "url": "http://blogman.com"
+      'title': 'My Blog',
+      'url': 'http://blogman.com'
     }
     await api
       .post('/api/blogs')
@@ -100,9 +100,9 @@ describe('tests for POST "/api/blogs"', async () => {
   })
   test('if request does not have token, return status 401 Unauthorized', async () => {
     const newBlog = {
-      "title": "My Blog",
-      "author": "John",
-      "url": "http://blogman.com"
+      'title': 'My Blog',
+      'author': 'John',
+      'url': 'http://blogman.com'
     }
     await api
       .post('/api/blogs')
@@ -122,10 +122,10 @@ describe('tests for DELETE "/api/blogs"', () => {
       .send({ username: 'root', password: 'salas_na' })
 
     const newBlog = {
-        "title": "My Blog",
-        "author": "John",
-        "url": "http://blogman.com"
-      }
+      'title': 'My Blog',
+      'author': 'John',
+      'url': 'http://blogman.com'
+    }
 
     const response = await api
       .post('/api/blogs')
@@ -167,7 +167,7 @@ describe('tests for POST /api/users', () => {
     const usersBeforePOST = await helper.usersInDb()
     const newUser = {
       username: 'Te',
-      name: "Testi",
+      name: 'Testi',
       password: 's_lasana'
     }
 
@@ -187,7 +187,7 @@ describe('tests for POST /api/users', () => {
     const usersBeforePOST = await helper.usersInDb()
     const newUser = {
       username: 'Test',
-      name: "Testi",
+      name: 'Testi',
       password: 's_'
     }
 
@@ -208,7 +208,7 @@ describe('tests for POST /api/users', () => {
 
     const newUser = {
       username: 'root',
-      name: "Testi",
+      name: 'Testi',
       password: 'salasan_'
     }
 
