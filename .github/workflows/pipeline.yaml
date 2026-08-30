@@ -27,7 +27,6 @@ jobs:
         run: npm run eslint
       - run: npm test
       - run: npm run build
-      - run: npm run start:test
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
       - name: Run Playwright tests
