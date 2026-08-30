@@ -11,6 +11,11 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+      SECRET: ${{ secrets.SECRET }}
+      PORT: ${{ vars.PORT }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
