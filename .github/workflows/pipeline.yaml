@@ -31,3 +31,11 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run Playwright tests
         run: npm run test:e2e
+  deploy:
+    needs: [build_and_test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Trigger deployment
+        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message), '#skip') == false}}
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
