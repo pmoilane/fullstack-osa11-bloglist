@@ -54,3 +54,52 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+  success_notification:
+    needs: [build_and_test, deploy]
+    if: ${{ success() && github.event_name == 'push' && contains(join(github.event.commits.*.message), '#skip') == false}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Discord notification success
+        uses: sarisia/actions-status-discord@eb045afee445dc055c18d3d90bd0f244fd062708
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          nodetail: true
+          content: ':white_check_mark: Successful deplyment!'
+          title: 'Show details'
+          url: ${{ github.event.head_commit.url }}
+          description: |
+            **Commit:** ${{ github.sha }}
+            **Message:** ${{ github.event.head_commit.message }}
+            **Author:** ${{ github.actor }}
+  fail_notification:
+    needs: [build_and_test, deploy]
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Discord notification fail
+        env:
+          NEEDS_CONTEXT: ${{ toJson(needs) }}
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          FAILED_JOB: ${{ case(
+            needs.build_and_test.result == 'failure', 'build_and_test' ,
+            needs.deploy.result == 'failure', 'deploy',
+            'unknown'
+            )}}
+        uses: sarisia/actions-status-discord@eb045afee445dc055c18d3d90bd0f244fd062708
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          nodetail: true
+          content: ':x: Build failed!'
+          title: 'Details'
+          description: |
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ env.BRANCH_NAME }}
+            **Commit:** ${{ github.sha }}
+            **Author:** ${{ github.actor }}
+            **Workflow:** ${{ github.workflow }}
+            **Job:** ${{ env.FAILED_JOB }}
+
+            [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            [View commit](${{ github.server_url }}/${{ github.repository }}/commit/${{github.event.after}})
