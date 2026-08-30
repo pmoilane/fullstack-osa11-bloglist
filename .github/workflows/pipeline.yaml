@@ -39,3 +39,18 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message), '#skip') == false}}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+  tag_release:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message), '#skip') == false}}
+        uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
